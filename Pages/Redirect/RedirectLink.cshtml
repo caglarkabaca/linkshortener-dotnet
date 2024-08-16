@@ -1,0 +1,85 @@
+﻿@model LinkShortenerAPI.Models.ShortLink
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirect - @Model.Name</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: white;
+            margin: 0;
+        }
+        .wrapper {
+            position: absolute;
+            display: flex;
+            justify-content: flex-start;
+            width: 500px;
+            height: 7px;
+        }
+
+        .background {
+            animation-duration: 3s;
+            animation-name: growdown;
+            animation-iteration-count: infinite;
+            height: inherit;
+
+            background: #FFA900;
+            opacity: 0.3;
+        }
+
+        .bar {
+            animation-duration: 3s;
+            animation-name: growup;
+            animation-iteration-count: infinite;
+            height: inherit;
+            background: #FFA900;
+            opacity: 1;
+        }
+
+        @@keyframes growup {
+            from {
+                width: 0%;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @@keyframes growdown {
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
+        }
+    </style>
+
+    <script>
+        var delayInMilliseconds = 200;
+        setTimeout(function() {
+            document.getElementById("redirectLink").click();
+        }, delayInMilliseconds);
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="bar"></div>
+    <div class="background"></div>
+</div>
+<a href="@Model.RedirectUrl" target="_self" id="redirectLink"></a>
+</body>
+</html>
