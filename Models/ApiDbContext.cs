@@ -9,6 +9,7 @@ public class ApiDbContext : DbContext
     public DbSet<ShortLinkLog> ShortLinkLogs { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<CampaignCoupon> CampaignCoupons { get; set; }
+    public DbSet<UserCampaignSetting> UserCampaignSettings { get; set; }
 
     public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options)
     {

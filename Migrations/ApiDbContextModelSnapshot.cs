@@ -180,6 +180,44 @@ namespace LinkShortenerAPI.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("LinkShortenerAPI.Models.UserCampaignSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BackgroundColor")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("EndButtonText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LogoUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("StartButtonText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SuccessText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserCampaignSettings");
+                });
+
             modelBuilder.Entity("LinkShortenerAPI.Models.CampaignCoupon", b =>
                 {
                     b.HasOne("LinkShortenerAPI.Models.ShortLink", "ShortLink")
@@ -200,6 +238,17 @@ namespace LinkShortenerAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("ShortLink");
+                });
+
+            modelBuilder.Entity("LinkShortenerAPI.Models.UserCampaignSetting", b =>
+                {
+                    b.HasOne("LinkShortenerAPI.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

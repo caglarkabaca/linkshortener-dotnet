@@ -20,6 +20,11 @@ public class CampaignCouponController : Controller
     [HttpGet("{uniqueCode}")]
     public async Task<IActionResult> Index([FromRoute] string uniqueCode)
     {
-        return Ok(await _service.GetCouponServices(uniqueCode));
+        return Ok(
+            new CampaignCouponResponseDTO
+            {
+                Coupons = await _service.GetCouponServices(uniqueCode),
+                Setting = await _service.GetUserSettings(uniqueCode)
+            });
     }
 }

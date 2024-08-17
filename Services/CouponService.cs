@@ -34,4 +34,22 @@ public class CouponService
             return new List<CampaignCouponDTO>(); // err handling
         return await GetCouponServices(link);
     }
+    
+    public async Task<UserCampaignSettingDTO?> GetUserSettings(String uniqueId)
+    {
+        var link = await _context.ShortLinks.Where(l => l.UniqueCode == uniqueId).FirstOrDefaultAsync();
+        if (link == null)
+            return null;
+        var setting = await _context.UserCampaignSettings.Where(s => s.UserId == link.CreatedById).FirstOrDefaultAsync();
+        if (setting == null)
+            return null;
+        return new UserCampaignSettingDTO
+        {
+            BackgroundColor = setting.BackgroundColor,
+            EndButtonText = setting.EndButtonText,
+            LogoUrl = setting.LogoUrl,
+            SuccessText = setting.SuccessText,
+            StartButtonText = setting.StartButtonText
+        };
+    }
 }
