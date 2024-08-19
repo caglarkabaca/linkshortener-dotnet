@@ -122,6 +122,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseMiddleware<AuthMiddleware>();
 
+app.UseStaticFiles();
+
 app.MapControllers();
 app.MapHub<MainHub>("/hub");
 
