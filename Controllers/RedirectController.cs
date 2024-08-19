@@ -71,7 +71,7 @@ public class RedirectController : Controller
 
         // --
         if ((await _couponService.GetCouponServices(link)).Count > 0)
-            return Redirect("http://localhost:5173/" + link.UniqueCode);
+            return Redirect("game/index.html?code=" + uniqueCode);
 
         return View("~/Pages/Redirect/RedirectLink.cshtml", link);
     }

@@ -5,6 +5,7 @@ using LinkShortenerAPI.Models.DTO;
 using LinkShortenerAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -119,10 +120,12 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseAuthorization();
 app.UseMiddleware<AuthMiddleware>();
-
-app.UseStaticFiles();
 
 app.MapControllers();
 app.MapHub<MainHub>("/hub");
