@@ -4,11 +4,17 @@ class PreloadScene extends Phaser.Scene {
     }
 
     preload() {
-
+        this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
     }
 
     create() {
 
+        WebFont.load({
+            google: {
+                families: [ 'Montserrat']
+            },
+        });
+        
         const searchParams = new URLSearchParams(window.location.search);
         var uniqueCode = searchParams.get('code')
         if (uniqueCode.length <= 0)
@@ -36,7 +42,7 @@ class PreloadScene extends Phaser.Scene {
                 this.registry.set('config', json.setting)
 
                 document.getElementById("loader").remove()
-                document.getElementById("mainApp").style.display = "block"
+                document.getElementById("mainApp").style.display = "flex"
 
                 this.scene.start("GameScene");
             })

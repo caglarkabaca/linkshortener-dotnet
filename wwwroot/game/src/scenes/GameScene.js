@@ -1,4 +1,11 @@
-const colors = [0xEABFFF, 0xD580FF];
+// const colors = [0xEABFFF, 0xD580FF];
+const colors = [0x4724A1, 0xB387E8, 0x6B1CD5, 0x4D2379];
+
+// #4724A1
+// #B387E8
+// #6B1CD5
+// #4D2379
+
 const TEXT_COLOR = '#3c005a';
 
 
@@ -12,7 +19,7 @@ class GameScene extends Phaser.Scene {
         this.datas = this.registry.get('datas')
         this.config = this.registry.get('config')
 
-        document.getElementById('game-container').style.backgroundColor = this.config.backgroundColor
+        // document.getElementById('game-container').style.backgroundColor = this.config.backgroundColor
         document.body.style.backgroundColor = this.config.backgroundColor
         // logo set
         document.getElementById('logo').src = this.config.logoUrl
@@ -52,11 +59,12 @@ class GameScene extends Phaser.Scene {
         const angle = 360 / this.datas.length;
         var rounds = Phaser.Math.Between(2, 4);
         var prize = Phaser.Math.Between(0, this.datas.length - 1);
+        var spinAngle = 90 + angle / 2 + angle * prize
 
         this.tweens.add({
 
-            targets: [this.wheel],
-            angle: 360 * rounds + (240 - prize * angle) % 360,
+            targets: [this.wheel, this.wheeldots],
+            angle: - (360 * rounds + spinAngle),
             duration: 2000,
             ease: "Cubic.easeOut",
             callbackScope: this,
@@ -81,25 +89,40 @@ class GameScene extends Phaser.Scene {
 
     SpinWheel(h) {
 
+        // BG
         var graphics = this.make.graphics({
             x: 0,
             y: 0,
             add: false
         });
-        graphics.fillStyle(0xFFBFFF, 1);
-        graphics.fillCircle(180, 180, 180);
-        graphics.generateTexture("wheelbg", 180 * 2, 180 * 2);
+        graphics.fillStyle(0xFFFFFF, 1);
+        graphics.fillCircle(182, 182, 182);
+        graphics.generateTexture("wheelbg", 182 * 2, 182 * 2);
         const bg = this.add.sprite(200, h, "wheelbg")
+        bg.depth = -2
+        
+        // UCGEN
         var graphics = this.make.graphics({
             x: 0,
             y: 0,
             add: false
         });
-        graphics.fillStyle(TEXT_COLOR, 1);
-        graphics.fillTriangle(170, 0, 190, 0, 180, 15)
+        graphics.fillStyle(0xFFFFFF, 1);
+        graphics.fillTriangle(170, 0, 190, 0, 180, 20)
         graphics.generateTexture("wheelbgTriangle", 180 * 2, 180 * 2);
         const bgTriangle = this.add.sprite(200, h, "wheelbgTriangle")
         bgTriangle.depth = 1
+        
+        // NOKTA
+        var graphics = this.make.graphics({
+            x: 0,
+            y: 0,
+            add: false
+        });
+        graphics.fillStyle(0xFFFFFF, 1);
+        graphics.fillCircle(180, 180, 25)
+        graphics.generateTexture("wheelbgPoint", 180 * 2, 180 * 2);
+        const bgPoint = this.add.sprite(200, h, "wheelbgPoint")
 
         const parts = []
         const angle = 360 / this.datas.length;
@@ -113,11 +136,12 @@ class GameScene extends Phaser.Scene {
                 add: false
             });
             // setting graphics fill style
-            graphics.fillStyle(colors[i % 2], 1);
+            graphics.fillStyle(colors[i % 4], 1);
             // drawing the slice
             graphics.slice(175, 175, 175, Phaser.Math.DegToRad(i * angle), Phaser.Math.DegToRad((i + 1) * angle), false);
             // filling the slice
             graphics.fillPath();
+            
             graphics.generateTexture("label" + i, 175 * 2, 175 * 2);
             const _part = this.add.sprite(0, 0, "label" + i)
             _part.setOrigin(0.5, 0.5)
@@ -125,24 +149,38 @@ class GameScene extends Phaser.Scene {
 
             const radianAngle = Phaser.Math.DegToRad(angle * i + angle / 2);
 
-            const text = this.add.text(175 * 0.5 * Math.cos(radianAngle), 175 * 0.5 * Math.sin(radianAngle), this.datas[i].title, {
-                fontSize: '22px',
-                color: TEXT_COLOR,
-                fontFamily: 'Arial',
-                strokeThickness: 5
+            const text = this.add.text(175 * 0.95 * Math.cos(radianAngle), 175 * 0.95 * Math.sin(radianAngle), this.datas[i].title, {
+                fontSize: '18px',
+                color: "#fff",
+                fontFamily: "Montserrat",
             });
-            text.setOrigin(0.5, 0.5)
+            text.initRTL()
+            text.setOrigin(1, 0.5)
             text.angle = angle * i + angle / 2
             parts.push(this.add.container(0, 0, [_part, text]))
         }
         this.wheel = this.add.container(200, h, parts);
+        this.wheel.depth = -2
+        
+        // çember üzerindeki noktalar
+        var graphics = this.make.graphics({
+            x: 0,
+            y: 0
+        });
+        graphics.fillStyle(0xFFFFFF, 1)
+        for (var i = 0; i < this.datas.length; i++) {
+            graphics.fillCircle(175 + Math.cos(angle * i * Math.PI / 180) * 175, 175 + Math.sin(angle * i *  Math.PI / 180) * 175, 7)
+        }
+        graphics.generateTexture("dot" + i, 175 * 2, 175 * 2);
+        this.wheeldots = this.add.sprite(200, h, "dot" + i)
+        
     }
 
     RoundedTextBox(x, y, padding) {
         const alttext = this.add.text(x, y, this.startButtonText, {
             fontSize: '28px',
             color: "#ffffff",
-            fontFamily: 'Arial'
+            fontFamily: "Montserrat",
         });
         alttext.setOrigin(0.5, 0.5);
         const bonsss = alttext.getBounds()
@@ -157,7 +195,7 @@ class GameScene extends Phaser.Scene {
 
     ShowResult(winner) {
 
-        this.ResultBg(50, 50 + 75, 300, 375, 40)
+        this.ResultBg(50, 50 + 75, 300, 375, 45)
         this.SuccessText(200, 50 + 75, this.successText
             .replace('{title}', winner.title)
             .replace('{code}', winner.code)
@@ -181,8 +219,14 @@ class GameScene extends Phaser.Scene {
             x: x - (padding / 2),
             y: y - (padding / 2)
         });
-        graphics.fillStyle(0xFFBFFF, 1);
-        graphics.fillRoundedRect(0, 0, w + padding, h + padding, 12);
+        graphics.fillStyle(0x3c005a, 1);
+        graphics.fillRoundedRect(0, 0, w + padding, h + padding, 10);
+        var graphics = this.add.graphics({
+            x: x - ((padding - 5) / 2),
+            y: y - ((padding - 5) / 2)
+        });
+        graphics.fillStyle(0xFFFFFF, 1);
+        graphics.fillRoundedRect(0, 0, w + padding - 5, h + padding - 5, 10);
     }
 
     TextBox(textX, textY, padding, endText) {
@@ -191,6 +235,7 @@ class GameScene extends Phaser.Scene {
             fontSize: '24px',
             fill: '#ffffff',
             align: "center",
+            fontFamily: "Montserrat",
             wordWrap: { width: 250 }
         });
         buttonText.setOrigin(0.5, 0.5)
@@ -207,20 +252,23 @@ class GameScene extends Phaser.Scene {
     }
 
     SuccessText(x, y, successText) {
+        var width = 0;
         successText.forEach((text, index) => {
-            var fontSize = 64 - 16 * index;
+            var fontSize = 48 - 12 * index;
             if (fontSize < 24)
                 fontSize = 24
             const infoText = this.add.text(x, y, text, {
                 fontSize: fontSize,
                 color: TEXT_COLOR,
                 strokeThickness: 5,
-                fontFamily: 'Arial',
+                fontFamily: 'Montserrat',
                 align: "center",
-                wordWrap: { width: 300 }
+                wordWrap: { width: 285 }
             });
+            infoText.depth = 3
             infoText.setOrigin(0.5, 0);
             y += infoText.height + 5
+            
         });
     }
 }

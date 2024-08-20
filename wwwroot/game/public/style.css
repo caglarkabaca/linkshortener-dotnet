@@ -2,7 +2,8 @@ body {
     margin: 0;
     padding: 0;
     color: rgba(255, 255, 255, 0.87);
-    background-color: #080950;
+    /*background-color: #080950;*/
+    background-image: url("https://app.winfluencer.app/assets/images/auth-bg.png");
 }
 
 #app {
@@ -54,3 +55,5 @@ body {
         transform: rotate(360deg);
     }
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
