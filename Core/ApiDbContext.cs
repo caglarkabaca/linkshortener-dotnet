@@ -10,6 +10,7 @@ public class ApiDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<CampaignCoupon> CampaignCoupons { get; set; }
     public DbSet<UserCampaignSetting> UserCampaignSettings { get; set; }
+    public DbSet<VisitLog> VisitLogs { get; set; }
 
     public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options)
     {
