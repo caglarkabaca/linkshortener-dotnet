@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=0.5, user-scalable=no, minimal-ui">
     <link rel="stylesheet" href="public/style.css">
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser-arcade-physics.min.js"></script>
 
@@ -23,19 +23,23 @@
     <!-- <script type="module" src="src/main.js"></script> -->
     <script src="./src/scenes/PreloadScene.js"></script>
     <script src="./src/scenes/GameScene.js"></script>
-    <script src="./src/scenes/WinnerScene.js"></script>
+    <!-- <script src="./src/scenes/WinnerScene.js"></script> -->
     <script>
         const config = {
             type: Phaser.AUTO,
-            width: 400,
-            height: 600,
-            parent: 'game-container',
             transparent: true,
             scene: [
                 PreloadScene,
                 GameScene,
-                WinnerScene
-            ]
+                // WinnerScene
+            ],
+            scale: {
+                mode: Phaser.Scale.NONE,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: 400,
+                height: 650,
+                parent: 'game-container',
+            }
         };
         const game = new Phaser.Game(config);
     </script>

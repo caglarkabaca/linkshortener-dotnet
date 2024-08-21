@@ -36,10 +36,8 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
-        this.RoundedTextBox(200, 450, 50)
-        this.SpinWheel(200)
-
-        this.input.on("pointerdown", this.spin, this)
+        this.RoundedTextBox(200, 475, 50)
+        this.SpinWheel(225)
     }
 
     spin() {
@@ -48,7 +46,7 @@ class GameScene extends Phaser.Scene {
 
         this.input.off("pointerdown", this.spin, this)
 
-        const particles = this.add.particles(200, 20, 'red', {
+        const particles = this.add.particles(200, 33.5, 'red', {
             speed: 100,
             scale: { start: 1, end: 0 },
             blendMode: 'ADD'
@@ -150,9 +148,10 @@ class GameScene extends Phaser.Scene {
             const radianAngle = Phaser.Math.DegToRad(angle * i + angle / 2);
 
             const text = this.add.text(175 * 0.95 * Math.cos(radianAngle), 175 * 0.95 * Math.sin(radianAngle), this.datas[i].title, {
-                fontSize: '18px',
+                fontSize: 18,
                 color: "#fff",
                 fontFamily: "Montserrat",
+                resolution: 2
             });
             text.initRTL()
             text.setOrigin(1, 0.5)
@@ -184,6 +183,7 @@ class GameScene extends Phaser.Scene {
             fontSize: '28px',
             color: "#ffffff",
             fontFamily: "Montserrat",
+            resolution: 2
         });
         alttext.setOrigin(0.5, 0.5);
         const bonsss = alttext.getBounds()
@@ -194,6 +194,8 @@ class GameScene extends Phaser.Scene {
         const alttextbg = this.add.sprite(bonsss.centerX, bonsss.centerY, "asdas")
         alttextbg.setOrigin(0.5, 0.5)
         alttextbg.depth = -1
+        alttextbg.setInteractive()
+        alttextbg.on("pointerdown", () => this.spin())
     }
 
     ShowResult(winner) {
@@ -205,16 +207,14 @@ class GameScene extends Phaser.Scene {
             .replace('{description}', winner.description)
             .split('\\n'), winner.code
         )
-        this.TextBox(200, 250 + 75, 50, this.endButtonText);
-
-        this.input.on("pointerdown", function () {
+        this.TextBox(200, 250 + 75, 50, this.endButtonText, () => {
             if (winner.customRedirectUrl != null) {
                 window.location.replace(winner.customRedirectUrl)
             }
             else {
                 window.location.replace(winner.redirectUrl)
             }
-        }, this)
+        });
     }
 
     ResultBg(x, y, w, h, padding) {
@@ -232,13 +232,14 @@ class GameScene extends Phaser.Scene {
         graphics.fillRoundedRect(0, 0, w + padding - 5, h + padding - 5, 10);
     }
 
-    TextBox(textX, textY, padding, endText) {
+    TextBox(textX, textY, padding, endText, onClick) {
         // End Button
         var buttonText = this.add.text(textX, textY, endText, {
             fontSize: '24px',
             fill: '#ffffff',
             align: "center",
             fontFamily: "Montserrat",
+            resolution: 2,
             wordWrap: { width: 250 }
         });
         buttonText.setOrigin(0.5, 0.5)
@@ -252,6 +253,9 @@ class GameScene extends Phaser.Scene {
         });
         buttonGraphics.fillStyle(0x3c005a, 1);
         buttonGraphics.fillRoundedRect(0, 0, textBounds.width + padding, textBounds.height + padding, 12);
+        
+        buttonGraphics.setInteractive(new Phaser.Geom.Rectangle(0, 0, textBounds.width + padding, textBounds.height + padding), Phaser.Geom.Rectangle.Contains);
+        buttonGraphics.on("pointerdown", onClick)
     }
 
     SuccessText(x, y, successText, code) {
@@ -261,7 +265,8 @@ class GameScene extends Phaser.Scene {
             color: "#fff",
             fontFamily: 'Montserrat',
             align: "center",
-            wordWrap: { width: 285 }
+            wordWrap: { width: 285 },
+            resolution: 2
         });
         infoText.depth = 3
         infoText.setOrigin(0.5, 0);
@@ -271,7 +276,8 @@ class GameScene extends Phaser.Scene {
                 color: "#fff",
                 fontFamily: 'Montserrat',
                 align: "center",
-                wordWrap: { width: 285 }
+                wordWrap: { width: 285 },
+                resolution: 2
             });
             infoText.depth = 3
             infoText.setOrigin(0.5, 0);

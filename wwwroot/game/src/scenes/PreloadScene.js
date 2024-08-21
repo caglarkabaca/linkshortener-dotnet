@@ -19,7 +19,8 @@ class PreloadScene extends Phaser.Scene {
         var uniqueCode = searchParams.get('code')
         if (uniqueCode.length <= 0)
             return
-        var url = "https://localhost:7031/CampaignCoupon/" + uniqueCode
+        const host = window.location.origin;
+        var url = host + "/CampaignCoupon/" + uniqueCode
         this.spinnable = false
         fetch(url)
             .then((response) => response.json())
