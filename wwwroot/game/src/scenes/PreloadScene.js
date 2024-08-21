@@ -35,8 +35,8 @@ class PreloadScene extends Phaser.Scene {
                         logoUrl: "https://winfluencer.app/wp-content/uploads/w-logo.png",
                         backgroundColor: "#080950",
                         startButtonText: "Çevirmek için tıkla",
-                        endButtonText: "Kuponu kullanmak için tıkla",
-                        successText: "Kazandınız\\n{title}\\nKodunuz: {code}\\n{description}",
+                        endButtonText: "Siteye git",
+                        successText: "Tebrikler {title} adlı kuponu kazandınız!\n{code} kodunu ile kuponunuzu kullanabilirsiniz.",
                     }
                 }
                 this.registry.set('config', json.setting)

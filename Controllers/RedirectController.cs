@@ -62,7 +62,7 @@ public class RedirectController : Controller
 
         Console.WriteLine("Redirect işlemi yapıldı. " + link.UniqueCode + " " + link.CreatedById);
 
-        if (MainHub.ConnectedUsers.ContainsKey(link.CreatedById!.Value))
+        if (link.CreatedById != null && MainHub.ConnectedUsers.ContainsKey(link.CreatedById!.Value))
         {
             await _hub.Clients.Clients(MainHub.ConnectedUsers[link.CreatedById!.Value])
                 .SendAsync("ReceieveLog#" + link.Id, JsonSerializer.Serialize(shortLinkLogModel));

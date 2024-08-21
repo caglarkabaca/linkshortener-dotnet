@@ -108,9 +108,9 @@ class GameScene extends Phaser.Scene {
             add: false
         });
         graphics.fillStyle(0xFFFFFF, 1);
-        graphics.fillTriangle(170, 0, 190, 0, 180, 20)
+        graphics.fillTriangle(165, 0, 195, 0, 180, 40)
         graphics.generateTexture("wheelbgTriangle", 180 * 2, 180 * 2);
-        const bgTriangle = this.add.sprite(200, h, "wheelbgTriangle")
+        const bgTriangle = this.add.sprite(200, h - 20, "wheelbgTriangle")
         bgTriangle.depth = 1
         
         // NOKTA
@@ -174,6 +174,9 @@ class GameScene extends Phaser.Scene {
         graphics.generateTexture("dot" + i, 175 * 2, 175 * 2);
         this.wheeldots = this.add.sprite(200, h, "dot" + i)
         
+        this.wheel.angle = angle / 3
+        this.wheeldots.angle = angle / 3
+        
     }
 
     RoundedTextBox(x, y, padding) {
@@ -195,14 +198,14 @@ class GameScene extends Phaser.Scene {
 
     ShowResult(winner) {
 
-        this.ResultBg(50, 50 + 75, 300, 375, 45)
+        this.ResultBg(50, 50 + 75, 300, 250, 45)
         this.SuccessText(200, 50 + 75, this.successText
             .replace('{title}', winner.title)
             .replace('{code}', winner.code)
             .replace('{description}', winner.description)
-            .split('\\n')
+            .split('\\n'), winner.code
         )
-        this.TextBox(200, 375 + 75, 50, this.endButtonText);
+        this.TextBox(200, 250 + 75, 50, this.endButtonText);
 
         this.input.on("pointerdown", function () {
             if (winner.customRedirectUrl != null) {
@@ -215,17 +218,17 @@ class GameScene extends Phaser.Scene {
     }
 
     ResultBg(x, y, w, h, padding) {
-        var graphics = this.add.graphics({
-            x: x - (padding / 2),
-            y: y - (padding / 2)
-        });
-        graphics.fillStyle(0x3c005a, 1);
-        graphics.fillRoundedRect(0, 0, w + padding, h + padding, 10);
+        // var graphics = this.add.graphics({
+        //     x: x - (padding / 2),
+        //     y: y - (padding / 2)
+        // });
+        // graphics.fillStyle(0xffffff, 0.7);
+        // graphics.fillRoundedRect(0, 0, w + padding, h + padding, 10);
         var graphics = this.add.graphics({
             x: x - ((padding - 5) / 2),
             y: y - ((padding - 5) / 2)
         });
-        graphics.fillStyle(0xFFFFFF, 1);
+        graphics.fillStyle(0x000000, 0.90);
         graphics.fillRoundedRect(0, 0, w + padding - 5, h + padding - 5, 10);
     }
 
@@ -251,16 +254,21 @@ class GameScene extends Phaser.Scene {
         buttonGraphics.fillRoundedRect(0, 0, textBounds.width + padding, textBounds.height + padding, 12);
     }
 
-    SuccessText(x, y, successText) {
+    SuccessText(x, y, successText, code) {
         var width = 0;
+        const infoText = this.add.text(x, y, code, {
+            fontSize: 52,
+            color: "#fff",
+            fontFamily: 'Montserrat',
+            align: "center",
+            wordWrap: { width: 285 }
+        });
+        infoText.depth = 3
+        infoText.setOrigin(0.5, 0);
         successText.forEach((text, index) => {
-            var fontSize = 48 - 12 * index;
-            if (fontSize < 24)
-                fontSize = 24
-            const infoText = this.add.text(x, y, text, {
-                fontSize: fontSize,
-                color: TEXT_COLOR,
-                strokeThickness: 5,
+            const infoText = this.add.text(x, y + 75, text, {
+                fontSize: 12,
+                color: "#fff",
                 fontFamily: 'Montserrat',
                 align: "center",
                 wordWrap: { width: 285 }
