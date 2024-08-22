@@ -1,3 +1,4 @@
+using System.Text.Json;
 using LinkShortenerAPI.Models;
 using LinkShortenerAPI.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,9 @@ public class VisitLogController : Controller
             var logTime = DateTime.UtcNow;
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "0.0.0.0";
             var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
+            
+            var headersDict = HttpContext.Request.Headers.ToDictionary(a => a.Key, a => string.Join(";", a.Value));
+            var headersJson = JsonSerializer.Serialize(headersDict);
             await _context.VisitLogs.AddAsync(new VisitLog()
             {
                 From = dto.From,
@@ -32,7 +36,7 @@ public class VisitLogController : Controller
                 HtmlTagName = dto.HtmlTagName,
                 HtmlTagRaw = dto.HtmlTagRaw,
                 
-                UserAgent = userAgent,
+                UserAgent = headersJson,
                 IpAddress = ipAddress,
                 LogTime = logTime
             });

@@ -8,7 +8,6 @@ namespace LinkShortenerAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[AllowAnonymous]
 public class AuthController : Controller
 {
     private IUserService _userService;
@@ -16,6 +15,13 @@ public class AuthController : Controller
     public AuthController(IUserService userService)
     {
         _userService = userService;
+    }
+
+    [Authorize(Roles = "user,admin")]
+    [HttpGet("Validate")]
+    public IActionResult Validate()
+    {
+        return Ok();
     }
 
     [AllowAnonymous]
